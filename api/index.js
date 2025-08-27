@@ -79,8 +79,7 @@ app.delete('/api/posts/:id', (req, res) => {
 
 // Netlify exporta el handler de la función
 module.exports = app;
-// Si quieres correrlo localmente también, puedes añadir:
-// const PORT = process.env.PORT || 3000;
-// if (process.env.NODE_ENV !== 'production') {
-//     app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));
-// }
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 3001; // Usamos el puerto 3001 o el que prefieras
+    app.listen(PORT, () => console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`));
+}
