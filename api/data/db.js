@@ -1,6 +1,6 @@
 {
   "users": [
-    { "id": 1, "name": "Ada Lovelace", "email": "ada@example.com", "password": "secret" },
+    { "id": 1, "name": "Ada Lovelace", "email": "ada@example.com", "password": "secret123" },
     { "id": 2, "name": "Alan Turing", "email": "alan@example.com", "password": "secret" }
   ],
   "posts": [
