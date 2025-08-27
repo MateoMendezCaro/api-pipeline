@@ -34,7 +34,7 @@ app.get('/api/posts/:id', (req, res) => {
     const db = readDB();
     const post = db.posts.find(p => p.id === parseInt(req.params.id));
     if (!post) {
-        return res.status(404).json({ message: 'Post no encontrado' });
+        return res.status(404).json({ message: 'Post no encontrado lastima!!' });
     }
     res.json(post);
 });
