@@ -34,7 +34,6 @@ function updatePost(id, patch) {
     const err = new Error('Post no encontrado');
     err.status = 404; throw err;
   }
-  // Si cambian el userId, validar que exista
   if (patch.userId) {
     const user = data.users.find(u => u.id === Number(patch.userId));
     if (!user) {
