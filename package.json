@@ -1,10 +1,21 @@
 {
   "name": "api-pipeline",
   "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "engines": { "node": ">=18" },
   "main": "index.js",
   "scripts": {
-    "test": "jest --runInBand",
-    "dev": "nodemon api/src/index.js"
+    "setup": "npm install && npm install --prefix comments && npm install --prefix reactions",
+    "dev": "nodemon api/src/index.js",
+    "dev:api": "cross-env PORT=3001 COMMENTS_URL=http://localhost:4003 REACTIONS_URL=http://localhost:4004 nodemon api/src/index.js",
+    "dev:comments": "cross-env PORT=4003 MAIN_API_URL=http://localhost:3001 npm run dev --prefix comments",
+    "dev:reactions": "cross-env PORT=4004 MAIN_API_URL=http://localhost:3001 npm run dev --prefix reactions",
+    "dev:all": "concurrently -n api,comments,reactions -c blue,magenta,green \"npm:dev:api\" \"npm:dev:comments\" \"npm:dev:reactions\"",
+    "start:api": "node api/src/index.js",
+    "start:comments": "npm run start --prefix comments",
+    "start:reactions": "npm run start --prefix reactions",
+    "test": "jest --runInBand"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +26,8 @@
     "express": "^5.1.0"
   },
   "devDependencies": {
+    "concurrently": "^9.0.0",
+    "cross-env": "^7.0.3",
     "jest": "^30.1.3",
     "nodemon": "^3.1.10",
     "superset": "^2.0.1",

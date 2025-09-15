@@ -1,0 +1,18 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Ada",
+      "email": "ada@example.com",
+      "password": "secret"
+    }
+  ],
+  "posts": [
+    {
+      "id": 1,
+      "userId": 1,
+      "title": "Hola",
+      "content": "Mundo"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "comments": [
+    {
+      "id": 1,
+      "postId": 1,
+      "userId": 1,
+      "content": "¡Buen post!",
+      "createdAt": "2025-09-14T22:13:39.391Z",
+      "updatedAt": "2025-09-14T22:13:39.391Z"
+    },
+    {
+      "id": 2,
+      "postId": 1,
+      "userId": 1,
+      "content": "Gran trabajo",
+      "createdAt": "2025-09-14T22:14:18.670Z",
+      "updatedAt": "2025-09-14T22:14:18.670Z"
+    }
+  ]
+}
