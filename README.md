@@ -311,48 +311,6 @@ Ver engagement del post:
 
 GET http://localhost:3001/api/posts/1/engagement
 
-🧯 Troubleshooting (cosas que ya resolvimos)
-
-/comments/count devolvía “Comentario no encontrado”
-Causa: conflicto de rutas (/comments/:id capturaba count).
-Fix: declara /comments/count antes de /comments/:id.
-
-reactions/count daba total: 0 aunque hiciste POST
-Revisa:
-
-Header Content-Type: application/json en el POST.
-
-Estás mirando el archivo correcto: reactions/data/reactions-db.json.
-
-La API responde 200 a /api/users/:id y /api/posts/:id (la validación lo exige).
-
-El POST devuelve 201/200 (si devuelve 4xx, no se guarda).
-
-/api/posts/:id/engagement responde 502
-Pasa si /comments/count o /reactions/count no devuelven 200.
-Asegúrate de que los microservicios estén arriba y respondan OK.
-
-✅ Historias de usuario (cumplidas)
-
-HU1: Registro de Usuarios
-
-POST /api/users → 201
-
-Valida obligatorios (400) y duplicado (409)
-
-Persiste en api/data/db.json
-
-HU2: Creación de Posts
-
-POST /api/posts → 201
-
-Requiere userId válido (404 si no existe)
-
-Valida title y content (400)
-
-Persiste en api/data/db.json
-
-Extra: Comments & Reactions como microservicios + agregación /api/posts/:id/engagement.
 
 🧾 Scripts útiles (package.json raíz)
 
@@ -364,8 +322,3 @@ npm run dev:api / npm run dev:comments / npm run dev:reactions → por servicio.
 
 npm test → corre Jest/Supertest.
 
-🔒 Seguridad (nota académica)
-
-Passwords se guardan en texto plano por simplicidad de la práctica.
-
-En producción: hashear (p. ej. bcrypt), validar robustamente inputs, y agregar JWT o similar para endpoints protegidos.
