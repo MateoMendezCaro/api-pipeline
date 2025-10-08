@@ -1,3 +1,26 @@
+/**
+ * @openapi
+ * tags:
+ *   - name: Engagement
+ *     description: Agregación de métricas por Post
+ */
+
+/**
+ * @openapi
+ * /api/posts/{id}/engagement:
+ *   get:
+ *     tags: [Engagement]
+ *     summary: Engagement (comments + reactions) de un post
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200: { description: Métricas de engagement }
+ *       502: { description: Error consultando microservicios }
+ */
+
 const { Router } = require('express');
 const router = Router();
 
