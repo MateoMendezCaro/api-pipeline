@@ -1,11 +1,7 @@
 [build]
-  # Esto le dice a Netlify que todo tu código está en la carpeta 'api'
-  # y que debe tratarlo como funciones serverless.
   functions = "api/"
 
 [[redirects]]
-  # Redirige todas las peticiones que lleguen a /api/*
-  # hacia nuestra función serverless index.
   from = "/api/*"
   to = "/.netlify/functions/index/:splat"
   status = 200

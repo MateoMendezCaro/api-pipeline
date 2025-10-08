@@ -2,9 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const DEFAULT_DATA = { users: [], posts: [] };
-
-// Permite apuntar a otro archivo en tests con env var
-const DB_PATH = path.resolve(__dirname, '../../data/db.json');
+const DB_PATH = process.env.DB_PATH || path.resolve(__dirname, '../../data/db.json')
 
 function ensureFile() {
   if (!fs.existsSync(DB_PATH)) {
