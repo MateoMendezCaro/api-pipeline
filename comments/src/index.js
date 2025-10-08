@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
 
 const app = express();
 app.use(cors());
@@ -10,6 +12,17 @@ app.use(express.json());
 const PORT = process.env.PORT || 4003;
 const DB_PATH = process.env.DB_PATH || path.resolve(__dirname, '../data/comments-db.json');
 const MAIN_API_URL = process.env.MAIN_API_URL || 'http://localhost:3001';
+
+const swaggerSpec = swaggerJsdoc({
+  definition: {
+    openapi: '3.0.3',
+    info: { title: 'Comments Service', version: '1.0.0' },
+    servers: [{ url: `http://localhost:${PORT}` }],
+  },
+  apis: [__filename],
+});
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: true }));
 
 function ensureFile() {
   if (!fs.existsSync(DB_PATH)) {
@@ -30,7 +43,7 @@ function nextId(items) {
 }
 
 async function validateRefs({ postId, userId }) {
-  if (!MAIN_API_URL) return; 
+  if (!MAIN_API_URL) return;
   const [pRes, uRes] = await Promise.all([
     fetch(`${MAIN_API_URL}/api/posts/${postId}`),
     fetch(`${MAIN_API_URL}/api/users/${userId}`)
@@ -45,6 +58,30 @@ async function validateRefs({ postId, userId }) {
   }
 }
 
+/**
+ * @openapi
+ * tags:
+ *   - name: Comments
+ *     description: Comentarios por post
+ */
+
+/**
+ * @openapi
+ * /comments:
+ *   get:
+ *     tags: [Comments]
+ *     summary: Listar comentarios (filtros postId, userId)
+ *     parameters:
+ *       - in: query
+ *         name: postId
+ *         schema: { type: integer }
+ *       - in: query
+ *         name: userId
+ *         schema: { type: integer }
+ *     responses:
+ *       200: { description: Lista de comentarios }
+ */
+
 app.get('/comments', (req, res) => {
   const { postId, userId } = req.query;
   const db = readDB();
@@ -55,6 +92,22 @@ app.get('/comments', (req, res) => {
   res.json(out);
 });
 
+/**
+ * @openapi
+ * /comments/count:
+ *   get:
+ *     tags: [Comments]
+ *     summary: Conteo de comentarios por post
+ *     parameters:
+ *       - in: query
+ *         name: postId
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200: { description: Conteo devuelto }
+ *       400: { description: postId es obligatorio }
+ */
+
 app.get('/comments/count', (req, res) => {
   const { postId } = req.query;
   if (!postId) return res.status(400).json({ message: 'postId es obligatorio' });
@@ -63,6 +116,32 @@ app.get('/comments/count', (req, res) => {
   res.json({ postId: Number(postId), count });
 });
 
+/**
+ * @openapi
+ * /comments/{id}:
+ *   get:
+ *     tags: [Comments]
+ *     summary: Obtener comentario por id
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200: { description: Comentario }
+ *       404: { description: Comentario no encontrado }
+ *   delete:
+ *     tags: [Comments]
+ *     summary: Eliminar comentario
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       204: { description: Eliminado }
+ *       404: { description: Comentario no encontrado }
+ */
 
 app.get('/comments/:id', (req, res) => {
   const db = readDB();
@@ -73,6 +152,28 @@ app.get('/comments/:id', (req, res) => {
 
 app.post('/comments', async (req, res) => {
   try {
+    /**
+     * @openapi
+     * /comments:
+     *   post:
+     *     tags: [Comments]
+     *     summary: Crear comentario
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *             required: [postId, userId, content]
+     *             properties:
+     *               postId: { type: integer }
+     *               userId: { type: integer }
+     *               content: { type: string }
+     *     responses:
+     *       201: { description: Comentario creado }
+     *       400: { description: Datos faltantes }
+     *       404: { description: Usuario/Post no encontrado }
+     */
     const { postId, userId, content } = req.body || {};
     if (!postId || !userId || !content || !String(content).trim()) {
       return res.status(400).json({ message: 'postId, userId y content son obligatorios' });
